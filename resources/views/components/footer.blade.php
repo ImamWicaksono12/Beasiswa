@@ -1,6 +1,6 @@
 <footer class="bg-dark text-light py-5 mt-auto">
     <div class="container">
-        <div class="row gy-4">
+        <div class="row gy-4 justify-content-center">
             <!-- Brand & Description -->
             <div class="col-lg-4 col-md-6 pe-lg-5">
                 <div class="d-flex align-items-center gap-2 mb-3">
@@ -53,19 +53,6 @@
                     <i class="bi bi-envelope-fill me-3 text-primary"></i>
                     <span>beasiswa@yarsi.ac.id</span>
                 </div>
-            </div>
-
-            <!-- News/Updates -->
-            <div class="col-lg-3 col-md-6">
-                <h5 class="fw-bold mb-4 text-white">Buletin Beasiswa</h5>
-                <p class="text-secondary mb-3">Dapatkan informasi pembukaan beasiswa terbaru melalui email Anda.</p>
-                <form action="#" method="POST" class="d-flex">
-                    <input type="email" class="form-control border-secondary bg-dark text-white rounded-start-pill"
-                        placeholder="Alamat email Anda..." required>
-                    <button class="btn btn-primary rounded-end-pill px-3" type="submit">
-                        <i class="bi bi-send-fill"></i>
-                    </button>
-                </form>
             </div>
         </div>
 
