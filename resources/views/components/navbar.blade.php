@@ -2,8 +2,9 @@
     <div class="container">
         <!-- Navbar Brand -->
         <a class="navbar-brand fw-bold text-primary d-flex align-items-center gap-2" href="{{ url('/') }}">
-            <i class="bi bi-mortarboard-fill fs-3 text-primary"></i>
-            <span>{{ config('app.name', 'Beasiswa YARSI') }}</span>
+            <!-- <i class="bi bi-mortarboard-fill fs-3 text-primary"></i>
+            <span>{{ config('app.name', 'Beasiswa YARSI') }}</span> -->
+            <img src="{{ asset('images/logo-yarsi-ta.png') }}" alt="Universitas Yarsi" height="60">
         </a>
 
         <!-- Mobile Toggle Button -->
