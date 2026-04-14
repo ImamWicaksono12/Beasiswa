@@ -4,21 +4,10 @@
             <!-- Brand & Description -->
             <div class="col-lg-4 col-md-6 pe-lg-5">
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-mortarboard-fill fs-3 text-primary"></i>
-                    <h4 class="fw-bold mb-0 text-white">{{ config('app.name', 'Beasiswa YARSI') }}</h4>
+                    <img src="{{ asset('images/logo yarsi.png') }}" alt="Logo Yarsi" class="rounded" height="90">
                 </div>
                 <p class="text-secondary mb-4">Sistem Informasi Manajemen Beasiswa Universitas YARSI. Mendukung
                     pendidikan berkelanjutan dan mewujudkan generasi berprestasi.</p>
-                <div class="d-flex gap-3">
-                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle"><i
-                            class="bi bi-facebook"></i></a>
-                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle"><i
-                            class="bi bi-twitter-x"></i></a>
-                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle"><i
-                            class="bi bi-instagram"></i></a>
-                    <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle"><i
-                            class="bi bi-youtube"></i></a>
-                </div>
             </div>
 
             <!-- Tautan Cepat -->
