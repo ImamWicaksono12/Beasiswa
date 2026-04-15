@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('username')->unique();
-            $table->string('npm')->unique();
+            $table->string('npm')->unique()->nullable();
             $table->string('fakultas')->nullable();
             $table->string('prodi')->nullable();
             $table->enum('role', [

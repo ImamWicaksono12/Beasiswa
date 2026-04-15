@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+
 class AuthController extends Controller
 {
     public function login()
@@ -9,37 +14,56 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function authenticate(\Illuminate\Http\Request $request)
+    public function authenticate(Request $request)
     {
+
         $credentials = $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        if (\Illuminate\Support\Facades\Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $key = Str::lower($request->input('username')) . '|' . $request->ip();
 
-            $user = \Illuminate\Support\Facades\Auth::user();
-
-            return match ($user->role) {
-                'admin' => redirect()->intended('/dashboard/admin'),
-                'mahasiswa' => redirect()->intended('/dashboard/mahasiswa'),
-                'verifikator_prodi' => redirect()->intended('/dashboard/prodi'),
-                'puskaka' => redirect()->intended('/dashboard/puskaka'),
-                default => redirect()->intended('/dashboard'),
-            };
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            return back()->with('error', 'Terlalu banyak percobaan login. Coba lagi nanti.');
         }
 
-        return back()->with('error', 'Username atau password salah.')->withInput($request->only('username'));
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            RateLimiter::clear($key); 
+
+            return redirect()->intended(
+                $this->redirectByRole(Auth::user()->role)
+            );
+        }
+
+        // tambah percobaan jika gagal
+        RateLimiter::hit($key, 60); 
+
+        return back()
+            ->with('error', 'Username atau password salah.')
+            ->withInput($request->only('username'));
     }
 
-    public function logout(\Illuminate\Http\Request $request)
+    public function logout(Request $request)
     {
-        \Illuminate\Support\Facades\Auth::logout();
+        Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    private function redirectByRole($role)
+    {
+        return match ($role) {
+            'admin' => route('dashboard.admin'),
+            'mahasiswa' => route('dashboard.mahasiswa'),
+            'verifikator_prodi' => route('dashboard.prodi'),
+            'puskaka' => route('dashboard.puskaka'),
+            default => '/',
+        };
     }
 }
