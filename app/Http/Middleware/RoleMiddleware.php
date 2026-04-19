@@ -26,12 +26,16 @@ class RoleMiddleware
         }
 
         // Redirect unauthorized users to their correct dashboard
+        $error = 'Anda tidak memiliki akses ke halaman tersebut.';
+
         return match ($userRole) {
-            'admin' => redirect('/dashboard/admin')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
-            'mahasiswa' => redirect('/dashboard/mahasiswa')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
-            'verifikator_prodi' => redirect('/dashboard/prodi')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
-            'puskaka' => redirect('/dashboard/puskaka')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.'),
-            default => redirect('/dashboard')->with('error', 'Akses ditolak.'),
+            'admin'     => redirect('/dashboard/admin')->with('error', $error),
+            'kaprodi'   => redirect('/dashboard/kaprodi')->with('error', $error),
+            'wadek'     => redirect('/dashboard/wadek')->with('error', $error),
+            'warek'     => redirect('/dashboard/warek')->with('error', $error),
+            'puskaka'   => redirect('/dashboard/puskaka')->with('error', $error),
+            'mahasiswa' => redirect('/dashboard/mahasiswa')->with('error', $error),
+            default     => redirect('/')->with('error', 'Akses ditolak.'),
         };
     }
 }

@@ -1,22 +1,34 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboard;
-use App\Http\Controllers\Prodi\DashboardController as ProdiDashboard;
+use App\Http\Controllers\Kaprodi\DashboardController as KaprodiDashboard;
+use App\Http\Controllers\Wadek\DashboardController as WadekDashboard;
+use App\Http\Controllers\Warek\DashboardController as WarekDashboard;
 use App\Http\Controllers\Puskaka\DashboardController as PuskakaDashboard;
 
-/*
-|--------------------------------------------------------------------------
-| GUEST ROUTES
-|--------------------------------------------------------------------------
-*/
+
+Route::get('/', function () {
+    if (Auth::check()) {
+    return match (Auth::user()->role) {
+            'admin'     => redirect('/dashboard/admin'),
+            'kaprodi'   => redirect('/dashboard/kaprodi'),
+            'wadek'     => redirect('/dashboard/wadek'),
+            'warek'     => redirect('/dashboard/warek'),
+            'puskaka'   => redirect('/dashboard/puskaka'),
+            'mahasiswa' => redirect('/dashboard/mahasiswa'),
+            default     => abort(403),
+        };
+    }
+
+    return app(GuestController::class)->index();
+})->name('home');
+
+
 Route::middleware('guest')->group(function () {
-
-    Route::get('/', [GuestController::class, 'index'])->name('guest.home');
-
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticate']);
 
@@ -25,28 +37,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/program-beasiswa', [GuestController::class, 'scholarshipPrograms'])->name('guest.programs');
 });
 
-/*
-|--------------------------------------------------------------------------
-| AUTH ROUTES
-|--------------------------------------------------------------------------
-*/
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD ROUTES (ROLE BASED)
-|--------------------------------------------------------------------------
-*/
 Route::middleware('auth')->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN
-    |--------------------------------------------------------------------------
-    */
     Route::prefix('dashboard/admin')->middleware('role:admin')->group(function () {
         Route::get('/', [AdminDashboard::class, 'index'])->name('dashboard.admin');
         Route::get('/accounts', [AdminDashboard::class, 'accounts'])->name('admin.accounts');
@@ -54,12 +50,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/monitoring', [AdminDashboard::class, 'monitoring'])->name('admin.monitoring');
     });
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | MAHASISWA
-    |--------------------------------------------------------------------------
-    */
     Route::prefix('dashboard/mahasiswa')->middleware('role:mahasiswa')->group(function () {
         Route::get('/', [MahasiswaDashboard::class, 'index'])->name('dashboard.mahasiswa');
         Route::get('/katalog', [MahasiswaDashboard::class, 'katalog'])->name('mahasiswa.katalog');
@@ -68,22 +58,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/profil', [MahasiswaDashboard::class, 'profil'])->name('mahasiswa.profil');
     });
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | PRODI
-    |--------------------------------------------------------------------------
-    */
-    Route::prefix('dashboard/prodi')->middleware('role:verifikator_prodi')->group(function () {
-        Route::get('/', [ProdiDashboard::class, 'index'])->name('dashboard.prodi');
+    Route::prefix('dashboard/kaprodi')->middleware('role:kaprodi')->group(function () {
+        Route::get('/', [KaprodiDashboard::class, 'index'])->name('dashboard.kaprodi');
     });
 
+    Route::prefix('dashboard/wadek')->middleware('role:wadek')->group(function () {
+        Route::get('/', [WadekDashboard::class, 'index'])->name('dashboard.wadek');
+    });
 
-    /*
-    |--------------------------------------------------------------------------
-    | PUSKAKA
-    |--------------------------------------------------------------------------
-    */
+    Route::prefix('dashboard/warek')->middleware('role:warek')->group(function () {
+        Route::get('/', [WarekDashboard::class, 'index'])->name('dashboard.warek');
+    });
+
     Route::prefix('dashboard/puskaka')->middleware('role:puskaka')->group(function () {
         Route::get('/', [PuskakaDashboard::class, 'index'])->name('dashboard.puskaka');
     });

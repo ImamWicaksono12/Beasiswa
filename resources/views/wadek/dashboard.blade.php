@@ -7,26 +7,26 @@
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body p-5">
                     <div class="text-center mb-4">
-                        <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                            <i class="bi bi-file-earmark-check-fill fs-1"></i>
+                        <div class="bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-building-fill fs-1"></i>
                         </div>
-                        <h2 class="fw-bold">Halaman Verifikator Prodi</h2>
-                        <p class="text-muted">Proses validasi dan verifikasi dokumen beasiswa mahasiswa.</p>
+                        <h2 class="fw-bold">Dashboard Wakil Dekan</h2>
+                        <p class="text-muted">Monitoring dan approval beasiswa tingkat fakultas.</p>
                     </div>
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-light text-center">
-                                <i class="bi bi-clipboard-check-fill fs-3 text-warning mb-2"></i>
-                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Perlu Valisadi</small>
-                                <span class="fw-bold">0 Mahasiswa</span>
+                                <i class="bi bi-clipboard-data-fill fs-3 text-info mb-2"></i>
+                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Menunggu Approval</small>
+                                <span class="fw-bold">0 Pengajuan</span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 border rounded-3 bg-light text-center">
-                                <i class="bi bi-check-circle-fill fs-3 text-warning mb-2"></i>
-                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Telah Diverifikasi</small>
-                                <span class="fw-bold">0 Mahasiswa</span>
+                                <i class="bi bi-check-circle-fill fs-3 text-info mb-2"></i>
+                                <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Disetujui</small>
+                                <span class="fw-bold">0 Pengajuan</span>
                             </div>
                         </div>
                     </div>

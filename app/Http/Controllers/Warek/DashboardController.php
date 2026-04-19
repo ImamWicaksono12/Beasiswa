@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Puskaka;
+namespace App\Http\Controllers\Warek;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,6 +11,6 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('puskaka.dashboard', compact('user'));
+        return view('warek.dashboard', compact('user'));
     }
 }
