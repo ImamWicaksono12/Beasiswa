@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\BeasiswaController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboard;
 use App\Http\Controllers\Kaprodi\DashboardController as KaprodiDashboard;
 use App\Http\Controllers\Wadek\DashboardController as WadekDashboard;
@@ -48,6 +49,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/accounts', [AdminDashboard::class, 'accounts'])->name('admin.accounts');
         Route::get('/verification', [AdminDashboard::class, 'verification'])->name('admin.verification');
         Route::get('/monitoring', [AdminDashboard::class, 'monitoring'])->name('admin.monitoring');
+
+        // Beasiswa CRUD
+        Route::resource('beasiswa', BeasiswaController::class)
+            ->only(['index', 'store', 'update', 'destroy'])
+            ->names('admin.beasiswa');
+        Route::post('beasiswa/{beasiswa}/toggle', [BeasiswaController::class, 'toggleStatus'])
+            ->name('admin.beasiswa.toggle');
     });
 
     Route::prefix('dashboard/mahasiswa')->middleware('role:mahasiswa')->group(function () {

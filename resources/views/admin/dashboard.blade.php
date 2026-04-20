@@ -495,7 +495,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('admin.beasiswa.index') }}" class="nav-link">
                         <i class="bi bi-award-fill"></i> Program Beasiswa
                     </a>
                 </li>

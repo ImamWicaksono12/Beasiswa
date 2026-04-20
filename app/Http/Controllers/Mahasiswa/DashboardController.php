@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\Beasiswa;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -11,9 +13,22 @@ class DashboardController extends Controller
         return view('mahasiswa.dashboard');
     }
 
-    public function katalog()
+    public function katalog(Request $request)
     {
-        return view('mahasiswa.katalog');
+        $query = Beasiswa::where('is_active', true)->latest();
+
+        if ($request->filled('search')) {
+            $query->where('nama_beasiswa', 'like', '%' . $request->search . '%')
+                  ->orWhere('sumber_dana', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori_dana', $request->kategori);
+        }
+
+        $beasiswas = $query->get();
+
+        return view('mahasiswa.katalog', compact('beasiswas'));
     }
 
     public function pengajuan()
