@@ -60,15 +60,23 @@
         }
 
         .brand-logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            width: 52px;
+            height: 52px;
+            background: #fff;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            flex-shrink: 0;
+        }
+
+        .brand-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 4px;
         }
 
         .brand-name {
@@ -460,7 +468,7 @@
     <aside class="sidebar">
         <div class="brand-logo">
             <div class="brand-logo-icon">
-                <i class="bi bi-mortarboard-fill text-white"></i>
+                <img src="{{ asset('images/logo-yarsi.png') }}" alt="Logo YARSI">
             </div>
             <div class="brand-name">
                 YARSI<br><span style="font-size: 0.9rem; font-weight: 500; color: #94a3b8;">Scholarship</span>
@@ -679,7 +687,8 @@
 
                             <div class="mt-4">
                                 <label class="form-label fw-bold small text-uppercase">Catatan Verifikasi</label>
-                                <textarea class="form-control rounded-4 bg-light border-0" rows="3" placeholder="Tulis catatan di sini..."></textarea>
+                                <textarea class="form-control rounded-4 bg-light border-0" rows="3"
+                                    placeholder="Tulis catatan di sini..."></textarea>
                             </div>
                         </div>
                     </div>
