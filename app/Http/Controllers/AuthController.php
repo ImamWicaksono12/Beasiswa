@@ -17,33 +17,54 @@ class AuthController extends Controller
 
     public function authenticate(Request $request)
     {
-
+        // Validasi input
         $credentials = $request->validate([
             'username' => ['required', 'string', 'max:50'],
             'password' => ['required', 'string', 'min:6', 'max:100'],
         ]);
 
+        // Key untuk rate limiter
         $key = Str::lower($request->input('username')) . '|' . $request->ip();
 
+        // Cek terlalu banyak percobaan
         if (RateLimiter::tooManyAttempts($key, 5)) {
             return back()->with('error', 'Terlalu banyak percobaan login. Tunggu 2 menit.');
         }
+
+        // Attempt login
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->is_active ?? true === false) {
+
+            $user = Auth::user();
+
+            // ✅ FIX: cek status akun (sudah benar)
+            if (!$user->is_active) {
                 Auth::logout();
                 return back()->with('error', 'Akun dinonaktifkan');
             }
+
+            // Regenerate session
             $request->session()->regenerate();
+
+            // Reset rate limiter
             RateLimiter::clear($key);
-            return redirect($this->redirectByRole(Auth::user()->role));
+
+            // Redirect sesuai role
+            return redirect($this->redirectByRole($user->role));
         }
+
+        // Logging gagal login
         Log::warning('Login gagal', [
             'username' => $request->username,
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
+
+        // Delay biar brute force lebih sulit
         sleep(1);
+
+        // Hit rate limiter
         RateLimiter::hit($key, 120);
+
         return back()
             ->with('error', 'Username atau password salah.')
             ->withInput($request->only('username'));
