@@ -37,102 +37,304 @@
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: #0c1628;
             position: fixed;
             left: 0;
             top: 0;
-            z-index: 1000;
-            color: #f8fafc;
-            padding: 1.5rem;
+            z-index: 1050;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid rgba(255,255,255,0.06);
         }
 
-        .brand-logo {
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+            animation: sidebarGlow 6s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes sidebarGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 60px) scale(1.2); }
+        }
+
+        .sidebar-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 2.5rem;
-            padding: .5rem;
+            gap: 14px;
+            padding: 1.75rem 1.5rem 1.25rem;
+            flex-shrink: 0;
+            position: relative;
         }
 
-        .brand-logo-icon {
-            width: 52px;
-            height: 52px;
-            background: #fff;
-            border-radius: 12px;
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            background: white;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, .3);
             flex-shrink: 0;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.15), 0 4px 12px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
 
-        .brand-logo-icon img {
+        .brand-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 4px;
+            padding: 3px;
         }
 
-        .brand-name {
+        .brand-text {
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .brand-text strong {
+            display: block;
+            font-size: 1.15rem;
             font-weight: 800;
-            font-size: 1.25rem;
-            letter-spacing: -.5px;
+            color: #fff;
+            letter-spacing: -0.3px;
             line-height: 1;
         }
 
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-
-        .nav-label {
-            font-size: .75rem;
-            text-transform: uppercase;
-            letter-spacing: .1em;
+        .brand-text span {
+            font-size: 0.72rem;
             color: #64748b;
-            margin-bottom: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .admin-badge {
+            margin: 0.25rem 1.5rem 1rem;
+            background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(99,102,241,0.15));
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 12px;
+            padding: 0.65rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-badge::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-indigo));
+            border-radius: 3px 0 0 3px;
+        }
+
+        .admin-badge .avatar {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding-left: .5rem;
+            color: white;
+            flex-shrink: 0;
         }
 
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .admin-badge .info span {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.2;
         }
 
-        .nav-item {
-            margin-bottom: .5rem;
+        .admin-badge .info small {
+            font-size: 0.68rem;
+            color: #64748b;
         }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 0.25rem 1.5rem 1rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 0.75rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.1) transparent;
+        }
+
+        .sidebar-nav::-webkit-scrollbar { width: 4px; }
+        .sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+        .nav-group { margin-bottom: 1.25rem; }
+
+        .nav-group-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #334155;
+            padding: 0 0.75rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-group-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        .nav-item { margin-bottom: 2px; }
 
         .nav-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: .8rem 1rem;
-            color: #94a3b8;
-            text-decoration: none;
+            padding: 0.7rem 0.95rem;
             border-radius: 12px;
-            transition: all .2s;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.875rem;
             font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-link:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, .05);
-            transform: translateX(4px);
+        .nav-link .nav-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .nav-link .nav-label { flex: 1; }
+
+        .nav-link .nav-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: var(--accent-danger);
+            color: white;
+            padding: 2px 7px;
+            border-radius: 50px;
+            animation: pulseBadge 2s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(99,102,241,0.08));
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .nav-link:hover { color: #e2e8f0; }
+        .nav-link:hover::before { opacity: 1; }
+        .nav-link:hover .nav-icon {
+            background: rgba(59,130,246,0.15);
+            color: var(--accent-blue);
         }
 
         .nav-link.active {
-            background: var(--accent-blue);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, .3);
+            background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(99,102,241,0.2));
+            border: 1px solid rgba(99,102,241,0.25);
         }
 
-        .nav-link i {
-            font-size: 1.2rem;
+        .nav-link.active .nav-icon {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            color: white;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.35);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-indigo));
+            border-radius: 3px;
+        }
+
+        .sidebar-footer {
+            flex-shrink: 0;
+            padding: 1rem 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 0.7rem 0.95rem;
+            border-radius: 12px;
+            background: rgba(239,68,68,0.08);
+            border: 1px solid rgba(239,68,68,0.15);
+            color: #f87171;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239,68,68,0.15);
+            color: #fca5a5;
+        }
+
+        .btn-logout .nav-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239,68,68,0.15);
+            color: #f87171;
         }
 
         /* ---- Main ---- */
@@ -387,63 +589,104 @@
 <body>
 
     {{-- ====== SIDEBAR ====== --}}
-    <aside class="sidebar">
-        <div class="brand-logo">
-            <div class="brand-logo-icon">
-                <img src="{{ asset('images/logo-yarsi.png') }}" alt="Logo YARSI">
+    <aside class="sidebar" id="mainSidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <img src="{{ asset('images/logo-yarsi.png') }}" alt="YARSI">
             </div>
-            <div class="brand-name">
-                YARSI<br><span style="font-size:.9rem;font-weight:500;color:#94a3b8;">Scholarship</span>
+            <div class="brand-text">
+                <strong>YARSI</strong>
+                <span>Scholarship Portal</span>
             </div>
         </div>
 
-        <nav class="nav-section">
-            <div class="nav-label">Utama</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="{{ route('dashboard.admin') }}" class="nav-link">
-                        <i class="bi bi-grid-fill"></i> Dashboard
+        <div class="admin-badge">
+            <div class="avatar">AD</div>
+            <div class="info">
+                <span>{{ auth()->user()->nama ?? 'Admin YARSI' }}</span>
+                <small>Super Administrator</small>
+            </div>
+            <i class="bi bi-shield-fill-check ms-auto" style="color: #3b82f6; font-size: 0.9rem;"></i>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <nav class="sidebar-nav">
+
+            {{-- PUSAT KENDALI --}}
+            <div class="nav-group">
+                <div class="nav-group-label">Pusat Kendali</div>
+                <div class="nav-item">
+                    <a href="{{ route('dashboard.admin') }}" class="nav-link" id="nav-dashboard">
+                        <div class="nav-icon"><i class="bi bi-grid-fill"></i></div>
+                        <span class="nav-label">Dashboard</span>
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
+
+            {{-- MANAJEMEN DATA --}}
+            <div class="nav-group">
+                <div class="nav-group-label">Manajemen Data</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-users">
+                        <div class="nav-icon"><i class="bi bi-people-fill"></i></div>
+                        <span class="nav-label">Manajemen User Pejabat</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{{ route('admin.beasiswa.index') }}" class="nav-link active" id="nav-beasiswa">
+                        <div class="nav-icon"><i class="bi bi-award-fill"></i></div>
+                        <span class="nav-label">Master Beasiswa</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- VALIDASI AKHIR --}}
+            <div class="nav-group">
+                <div class="nav-group-label">Validasi Akhir</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-sk">
+                        <div class="nav-icon"><i class="bi bi-file-earmark-check-fill"></i></div>
+                        <span class="nav-label">Validasi Pendaftaran (SK)</span>
+                        <span class="nav-badge">5</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-monitoring">
+                        <div class="nav-icon"><i class="bi bi-patch-check-fill"></i></div>
+                        <span class="nav-label">Validasi Final Monitoring</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-kontrol">
+                        <div class="nav-icon"><i class="bi bi-toggle2-on"></i></div>
+                        <span class="nav-label">Kontrol Status Beasiswa</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- SISTEM --}}
+            <div class="nav-group">
+                <div class="nav-group-label">Sistem</div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" id="nav-log">
+                        <div class="nav-icon"><i class="bi bi-journal-text"></i></div>
+                        <span class="nav-label">Log Aktivitas Global</span>
+                    </a>
+                </div>
+            </div>
+
         </nav>
 
-        <nav class="nav-section">
-            <div class="nav-label">Manajemen</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-people-fill"></i> Manajemen Akun
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.beasiswa.index') }}" class="nav-link active">
-                        <i class="bi bi-award-fill"></i> Program Beasiswa
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <nav class="nav-section">
-            <div class="nav-label">Proses</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="bi bi-file-earmark-check-fill"></i> Verifikasi SK</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="bi bi-activity"></i> Monitoring</a>
-                </li>
-            </ul>
-        </nav>
-
-        <nav class="nav-section" style="margin-top:auto;">
-            <div class="nav-label">System</div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="bi bi-journal-text"></i> Laporan</a>
-                </li>
-            </ul>
-        </nav>
+        <div class="sidebar-footer">
+            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                @csrf
+                <button type="submit" class="btn-logout">
+                    <div class="nav-icon"><i class="bi bi-box-arrow-left"></i></div>
+                    <span>Keluar dari Sistem</span>
+                </button>
+            </form>
+        </div>
     </aside>
 
     {{-- ====== MAIN ====== --}}
