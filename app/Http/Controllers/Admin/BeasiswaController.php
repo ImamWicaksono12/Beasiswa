@@ -4,16 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Beasiswa;
+use App\Services\BeasiswaService;
 use Illuminate\Http\Request;
 
 class BeasiswaController extends Controller
 {
+    public function __construct(
+        private BeasiswaService $service
+    ) {}
+
     /**
      * Tampilkan semua data beasiswa.
      */
     public function index()
     {
-        $beasiswas = Beasiswa::latest()->get();
+        $beasiswas = $this->service->getAll();
+
         return view('admin.beasiswa.index', compact('beasiswas'));
     }
 
@@ -32,7 +38,7 @@ class BeasiswaController extends Controller
 
         $validated['is_active'] = $request->has('is_active');
 
-        Beasiswa::create($validated);
+        $this->service->create($validated);
 
         return redirect()->route('admin.beasiswa.index')
             ->with('success', 'Program beasiswa berhasil ditambahkan.');
@@ -43,7 +49,7 @@ class BeasiswaController extends Controller
      */
     public function edit(Beasiswa $beasiswa)
     {
-        return response()->json($beasiswa);
+        return response()->json($this->service->getById($beasiswa));
     }
 
     /**
@@ -61,7 +67,7 @@ class BeasiswaController extends Controller
 
         $validated['is_active'] = $request->has('is_active');
 
-        $beasiswa->update($validated);
+        $this->service->update($beasiswa, $validated);
 
         return redirect()->route('admin.beasiswa.index')
             ->with('success', 'Program beasiswa berhasil diperbarui.');
@@ -72,7 +78,7 @@ class BeasiswaController extends Controller
      */
     public function destroy(Beasiswa $beasiswa)
     {
-        $beasiswa->delete();
+        $this->service->delete($beasiswa);
 
         return redirect()->route('admin.beasiswa.index')
             ->with('success', 'Program beasiswa berhasil dihapus.');
@@ -83,7 +89,7 @@ class BeasiswaController extends Controller
      */
     public function toggleStatus(Beasiswa $beasiswa)
     {
-        $beasiswa->update(['is_active' => !$beasiswa->is_active]);
+        $beasiswa = $this->service->toggleStatus($beasiswa);
 
         return response()->json([
             'success'   => true,
