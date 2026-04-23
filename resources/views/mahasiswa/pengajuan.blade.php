@@ -21,11 +21,11 @@
                     <form action="#" method="POST">
                         <div class="mb-4">
                             <label class="form-label fw-bold">Pilih Program Beasiswa</label>
-                            <select class="form-select border-light bg-light rounded-3 p-3">
-                                <option selected disabled>Pilih program...</option>
-                                <option>Beasiswa Full Funded Ganjil 2024</option>
-                                <option>Beasiswa Tahfidz Batch 3</option>
-                                <option>Beasiswa Satu Juta Mimpi</option>
+                            <select class="form-select border-light bg-light rounded-3 p-3" name="beasiswa_id" required>
+                                <option selected disabled value="">Pilih program...</option>
+                                @foreach ($beasiswas as $beasiswa)
+                                    <option value="{{ $beasiswa->id }}">{{ $beasiswa->nama_beasiswa }} — {{ $beasiswa->sumber_dana }}</option>
+                                @endforeach
                             </select>
                         </div>
 

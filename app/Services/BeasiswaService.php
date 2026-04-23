@@ -16,6 +16,14 @@ class BeasiswaService
     }
 
     /**
+     * Ambil beasiswa yang aktif saja.
+     */
+    public function getActive(): Collection
+    {
+        return Beasiswa::where('is_active', true)->latest()->get();
+    }
+
+    /**
      * Ambil detail satu beasiswa.
      */
     public function getById(Beasiswa $beasiswa): Beasiswa

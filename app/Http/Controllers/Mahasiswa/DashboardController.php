@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
 use App\Models\Beasiswa;
+use App\Services\BeasiswaService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private BeasiswaService $beasiswaService
+    ) {}
+
     public function index()
     {
         return view('mahasiswa.dashboard');
@@ -33,7 +38,9 @@ class DashboardController extends Controller
 
     public function pengajuan()
     {
-        return view('mahasiswa.pengajuan');
+        $beasiswas = $this->beasiswaService->getActive();
+
+        return view('mahasiswa.pengajuan', compact('beasiswas'));
     }
 
     public function riwayat()
