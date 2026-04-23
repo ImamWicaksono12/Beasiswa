@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Guest\GuestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\BeasiswaController;
+use App\Http\Controllers\Admin\UserPejabatController;
 use App\Http\Controllers\Mahasiswa\DashboardController as MahasiswaDashboard;
 use App\Http\Controllers\Kaprodi\DashboardController as KaprodiDashboard;
 use App\Http\Controllers\Wadek\DashboardController as WadekDashboard;
@@ -56,6 +57,13 @@ Route::middleware('auth')->group(function () {
             ->names('admin.beasiswa');
         Route::post('beasiswa/{beasiswa}/toggle', [BeasiswaController::class, 'toggleStatus'])
             ->name('admin.beasiswa.toggle');
+
+        // User Pejabat CRUD
+        Route::resource('users', UserPejabatController::class)
+            ->only(['index', 'store', 'show', 'update', 'destroy'])
+            ->names('admin.users');
+        Route::post('users/{user}/toggle', [UserPejabatController::class, 'toggleStatus'])
+            ->name('admin.users.toggle');
     });
 
     Route::prefix('dashboard/mahasiswa')->middleware('role:mahasiswa')->group(function () {

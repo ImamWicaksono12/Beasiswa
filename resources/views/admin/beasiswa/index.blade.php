@@ -628,13 +628,13 @@
             <div class="nav-group">
                 <div class="nav-group-label">Manajemen Data</div>
                 <div class="nav-item">
-                    <a href="#" class="nav-link" id="nav-users">
+                    <a href="javascript:void(0)" class="nav-link" id="nav-users" onclick="switchSection('users')">
                         <div class="nav-icon"><i class="bi bi-people-fill"></i></div>
                         <span class="nav-label">Manajemen User Pejabat</span>
                     </a>
                 </div>
                 <div class="nav-item">
-                    <a href="{{ route('admin.beasiswa.index') }}" class="nav-link active" id="nav-beasiswa">
+                    <a href="{{ route('admin.beasiswa.index') }}" class="nav-link" id="nav-beasiswa">
                         <div class="nav-icon"><i class="bi bi-award-fill"></i></div>
                         <span class="nav-label">Master Beasiswa</span>
                     </a>

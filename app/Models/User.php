@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role',
         'kode_prodi',
         'kode_fakultas',
+        'is_active',
     ];
 
     /**
