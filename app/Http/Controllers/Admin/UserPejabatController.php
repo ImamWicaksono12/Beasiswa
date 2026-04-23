@@ -4,40 +4,25 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\UserPejabatService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserPejabatController extends Controller
 {
-    /**
-     * Roles pejabat yang dikelola (exclude mahasiswa & admin).
-     */
-    private array $pejabatRoles = ['kaprodi', 'wadek', 'warek', 'puskaka'];
+    public function __construct(
+        private UserPejabatService $service
+    ) {}
 
     /**
      * Ambil semua user pejabat (JSON untuk DataTable).
      */
     public function index(Request $request)
     {
-        $query = User::whereIn('role', $this->pejabatRoles);
-
-        // Filter by role
-        if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
-
-        // Search by nama or username
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('username', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $users = $query->latest()->get();
+        $users = $this->service->getAll(
+            search: $request->input('search'),
+            role: $request->input('role'),
+        );
 
         return response()->json(['data' => $users]);
     }
@@ -52,16 +37,15 @@ class UserPejabatController extends Controller
             'nama'          => 'required|string|max:255',
             'email'         => 'nullable|email|max:255|unique:users,email',
             'password'      => 'required|string|min:6|confirmed',
-            'role'          => ['required', Rule::in($this->pejabatRoles)],
+            'role'          => ['required', Rule::in($this->service->getPejabatRoles())],
             'kode_prodi'    => 'nullable|string|max:20',
             'kode_fakultas' => 'nullable|string|max:20',
             'is_active'     => 'nullable|boolean',
         ]);
 
-        $validated['password']  = Hash::make($validated['password']);
         $validated['is_active'] = $request->boolean('is_active', true);
 
-        $user = User::create($validated);
+        $user = $this->service->create($validated);
 
         return response()->json([
             'success' => true,
@@ -75,9 +59,7 @@ class UserPejabatController extends Controller
      */
     public function show(User $user)
     {
-        if (!in_array($user->role, $this->pejabatRoles)) {
-            return response()->json(['error' => 'User bukan pejabat.'], 403);
-        }
+        $user = $this->service->getById($user);
 
         return response()->json($user);
     }
@@ -87,36 +69,25 @@ class UserPejabatController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if (!in_array($user->role, $this->pejabatRoles)) {
-            return response()->json(['error' => 'User bukan pejabat.'], 403);
-        }
-
         $validated = $request->validate([
             'username'      => ['required', 'string', 'max:100', Rule::unique('users')->ignore($user->id)],
             'nama'          => 'required|string|max:255',
             'email'         => ['nullable', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password'      => 'nullable|string|min:6|confirmed',
-            'role'          => ['required', Rule::in($this->pejabatRoles)],
+            'role'          => ['required', Rule::in($this->service->getPejabatRoles())],
             'kode_prodi'    => 'nullable|string|max:20',
             'kode_fakultas' => 'nullable|string|max:20',
             'is_active'     => 'nullable|boolean',
         ]);
 
-        // Hanya update password kalau diisi
-        if (!empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
-        }
-
         $validated['is_active'] = $request->boolean('is_active', true);
 
-        $user->update($validated);
+        $user = $this->service->update($user, $validated);
 
         return response()->json([
             'success' => true,
             'message' => 'User pejabat berhasil diperbarui.',
-            'user'    => $user->fresh(),
+            'user'    => $user,
         ]);
     }
 
@@ -125,11 +96,7 @@ class UserPejabatController extends Controller
      */
     public function destroy(User $user)
     {
-        if (!in_array($user->role, $this->pejabatRoles)) {
-            return response()->json(['error' => 'User bukan pejabat.'], 403);
-        }
-
-        $user->delete();
+        $this->service->delete($user);
 
         return response()->json([
             'success' => true,
@@ -142,11 +109,7 @@ class UserPejabatController extends Controller
      */
     public function toggleStatus(User $user)
     {
-        if (!in_array($user->role, $this->pejabatRoles)) {
-            return response()->json(['error' => 'User bukan pejabat.'], 403);
-        }
-
-        $user->update(['is_active' => !$user->is_active]);
+        $user = $this->service->toggleStatus($user);
 
         return response()->json([
             'success'   => true,
